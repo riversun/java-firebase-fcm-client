@@ -44,8 +44,19 @@ public class SendMessageExample1 {
 
 	}
 }
-
 ```
+### DeviceMessage.java simply wraps following JSON.
+
+```json
+{ "data":{
+    "myKey1":"myValue1",
+    "myKey2":"myValue2"
+  },
+  "registration_ids":["your_registration_token1","your_registration_token2]
+}
+```
+
+
 
 ## Example Receive push notification on Android
 Whether the application is foreground or background, you can handle push notifications in the same way.
@@ -144,6 +155,15 @@ Add this into dependencies
             }
         }
 ```
+# Links
+## Firebase Console
+
+https://console.firebase.google.com/
+
+## Format
+
+https://firebase.google.com/docs/cloud-messaging/http-server-ref
+https://firebase.google.com/docs/cloud-messaging/send-message
 
 # Downloads
 ## maven
