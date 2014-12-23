@@ -144,7 +144,7 @@ public class DeviceMessage {
 	/**
 	 * Generates JSON text
 	 * <p>
-	 * To generate json message like followings<br>
+	 * To generate JSON message like followings<br>
 	 * <code>
 	 * { "data":{
 	 *     "myKey1":"myValue1",
