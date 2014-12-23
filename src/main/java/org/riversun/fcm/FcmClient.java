@@ -90,7 +90,7 @@ public class FcmClient {
 	 * @return
 	 */
 	public FcmResponse pushToDevices(DeviceMessage msg) {
-		return new FcmResponse(pushNotify(msg.toJsonObject()));
+		return pushNotify(msg.toJsonObject());
 	}
 
 	/**
@@ -110,8 +110,10 @@ public class FcmClient {
 	 * 
 	 * @param json
 	 * @return
+	 * @throws IOException
 	 */
-	public JSONObject pushNotify(JSONObject json) {
+	public FcmResponse pushNotify(JSONObject json) {
+		FcmResponse ret = null;
 
 		final String requestText = json.toString();
 		LOGGER.fine("request:\n" + requestText);
@@ -163,19 +165,30 @@ public class FcmClient {
 			final String responseText = sb.toString();
 			LOGGER.fine("response:\n" + responseText);
 
-			final JSONObject ret = new JSONObject(responseText);
+			final JSONObject jo = new JSONObject(responseText);
 
-			return ret;
+			ret = new FcmResponse(con.getResponseCode(), jo);
 
 		} catch (MalformedURLException e) {
 
 		} catch (IOException e) {
-
 			// when network error occurred
-			try {
-				con.getErrorStream().close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+
+			if (con != null) {
+
+				try {
+					final int responseCode = con.getResponseCode();
+
+					if (responseCode >= 400) {
+						String msg = getFromStream(con.getErrorStream());
+						ret = new FcmResponse(responseCode, msg, e);
+					} else {
+						String msg = getFromStream(con.getInputStream());
+						ret = new FcmResponse(responseCode, msg, e);
+					}
+				} catch (IOException e1) {
+				}
+
 			}
 
 			LOGGER.log(Level.WARNING, "Network error occurred while sending to firebase.", e);
@@ -224,7 +237,47 @@ public class FcmClient {
 			}
 
 		}
-		return null;
+		return ret;
+
+	}
+
+	private String getFromStream(InputStream is) {
+
+		BufferedReader br = null;
+		InputStreamReader isr = null;
+		final StringBuilder sb = new StringBuilder();
+
+		try {
+
+			isr = new InputStreamReader(is, "UTF-8");
+			br = new BufferedReader(isr);
+
+			for (String line; (line = br.readLine()) != null;) {
+				sb.append(line);
+			}
+		} catch (Exception e) {
+
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+				}
+			}
+			if (isr != null) {
+				try {
+					isr.close();
+				} catch (IOException e) {
+				}
+			}
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+		return sb.toString();
 
 	}
 

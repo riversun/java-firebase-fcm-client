@@ -1,4 +1,4 @@
-package com.example.send_notification;
+package org.riversun.fcm;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
