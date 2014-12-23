@@ -68,23 +68,36 @@ public class FcmClient {
 	}
 
 	/**
-	 * Push notification to individual devices specified by registration id that
-	 * can be retrieved by FirebaseInstanceId.getInstance().getToken() on the
-	 * mobile device.
+	 * 
+	 * To send messages to specific device(s) specified by registration token(s)
+	 * that can be retrieved by FirebaseInstanceId.getInstance().getToken() on
+	 * the mobile device(s). <br>
+	 * To generate JSON message and to make a HTTP POST request like followings<br>
+	 * <code>
+	 * https://fcm.googleapis.com/fcm/send<br>
+	 * Content-Type:application/json<br>
+	 * Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA<br>
+	 * 
+	 * { "data":{
+	 *     "myKey1":"myValue1",
+	 *     "myKey2":"myValue2"
+	 *   },
+	 *   "registration_ids":["your_registration_token1","your_registration_token2]
+	 * }
+	 * </code>
 	 * 
 	 * @param msg
 	 * @return
 	 */
-	public FcmResponse pushToDevice(DeviceMessage msg) {
+	public FcmResponse pushToDevices(DeviceMessage msg) {
 		return new FcmResponse(pushNotify(msg.toJsonObject()));
 	}
 
 	/**
-	 * Where is server key.
-	 * <p>
-	 * Open https://console.firebase.google.com and select your project.Click
-	 * project settings and you can find the Server Key on the
-	 * "CloudMessaging Tab"
+	 * Set the server API key <br>
+	 * Where is server API key. Open https://console.firebase.google.com and
+	 * select your project.Click project settings and you can find the Server
+	 * Key on the "CloudMessaging Tab"
 	 * 
 	 */
 

@@ -29,11 +29,22 @@ import java.util.Map;
 import org.json.JSONObject;
 
 /**
- * Notification data for pushing to the individual devices via Firebase cloud
- * messaging service<br>
- * <br>
- * Partially wrapped as follows.
- * https://firebase.google.com/docs/cloud-messaging/http-server-ref
+ * Data model for sending messages to specific devices<br>
+ * 
+ * <p>
+ * Wrapped JSON message like, <br>
+ * 
+ * <code>
+ * { "data":{
+ *     "myKey1":"myValue1",
+ *     "myKey2":"myValue2"
+ *   },
+ *   "registration_ids":["your_registration_token1","your_registration_token2]
+ * }
+ * </code>
+ * 
+ * {@see https://firebase.google.com/docs/cloud-messaging/http-server-ref}
+ * {@see https://firebase.google.com/docs/cloud-messaging/send-message}
  * 
  * @author Tom Misawa (riversun.org@gmail.com)
  *
@@ -41,7 +52,7 @@ import org.json.JSONObject;
 public class DeviceMessage {
 
 	private final Map<String, Object> mDataMap = new LinkedHashMap<String, Object>();
-	private final List<String> mRegistrationIdList = new ArrayList<String>();
+	private final List<String> mRegistrationTokenList = new ArrayList<String>();
 
 	/**
 	 * Pub String value to the payload
@@ -76,20 +87,20 @@ public class DeviceMessage {
 	/**
 	 * Add specified registrationId
 	 * 
-	 * @param registrationId
+	 * @param registrationToken
 	 */
-	public void addRegistrationId(String registrationId) {
-		mRegistrationIdList.add(registrationId);
+	public void addRegistrationToken(String registrationToken) {
+		mRegistrationTokenList.add(registrationToken);
 	}
 
 	/**
 	 * Remove specified registrationId
 	 * 
-	 * @param registrationId
+	 * @param registrationToken
 	 */
-	public void removeRegistrationId(String registrationId) {
-		if (mRegistrationIdList.contains(registrationId)) {
-			mRegistrationIdList.remove(registrationId);
+	public void removeRegistrationToken(String registrationToken) {
+		if (mRegistrationTokenList.contains(registrationToken)) {
+			mRegistrationTokenList.remove(registrationToken);
 		}
 
 	}
@@ -99,27 +110,27 @@ public class DeviceMessage {
 	 * 
 	 * @param list
 	 */
-	public void setRegistrationIdList(List<String> list) {
-		mRegistrationIdList.clear();
-		mRegistrationIdList.addAll(list);
+	public void setRegistrationTokenList(List<String> list) {
+		mRegistrationTokenList.clear();
+		mRegistrationTokenList.addAll(list);
 	}
 
 	/**
 	 * Remove all registered registrationIds
 	 */
-	public void clearRegistrationIds() {
-		mRegistrationIdList.clear();
+	public void clearRegistrationTokens() {
+		mRegistrationTokenList.clear();
 	}
 
 	/**
-	 * Returns JSONObject
+	 * Generates JSONObject
 	 * 
 	 * @return
 	 */
 	public JSONObject toJsonObject() {
 
 		final JSONObject json = new JSONObject();
-		final String[] registrationIds = mRegistrationIdList.toArray(new String[] {});
+		final String[] registrationIds = mRegistrationTokenList.toArray(new String[] {});
 
 		// for multicast
 		json.accumulate("registration_ids", registrationIds);
@@ -131,7 +142,18 @@ public class DeviceMessage {
 	}
 
 	/**
-	 * Returns JSON text
+	 * Generates JSON text
+	 * <p>
+	 * To generate json message like followings<br>
+	 * <code>
+	 * { "data":{
+	 *     "myKey1":"myValue1",
+	 *     "myKey2":"myValue2"
+	 *   },
+	 *   "registration_ids":["your_registration_token1","your_registration_token2]
+	 * }
+	 * </code>
+	 * 
 	 * 
 	 * @return
 	 */
