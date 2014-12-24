@@ -61,7 +61,11 @@ public class SendMessageExample1 {
 ## Example Receive push notification on Android
 Whether the application is foreground or background, you can handle push notifications in the same way.
 
-### MyFirebaseMessagingService.java
+### Example for Android is here.
+https://github.com/riversun/android-firebase-fcm-client
+
+## Example for Android overview
+### - MyFirebaseMessagingService.java
 
 ```java
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -79,7 +83,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 }
 ```
 
-### MyFirebaseInstanceIDService.java
+### - MyFirebaseInstanceIDService.java
 
 ```java
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -98,7 +102,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 }
 ```
 
-### Add services to your AndroidManifest.xml
+### - Add services to your AndroidManifest.xml
 
 ```xml
 <manifest>
@@ -120,7 +124,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 </manifest>
 ```
 
-### [project]/app/build.gradle
+### - [project]/app/build.gradle
 
 Add this into dependencies
 ```
@@ -133,7 +137,7 @@ Add this, it is important to place this at the bottom line.
 apply plugin: 'com.google.gms.google-services'
 ```
 
-### [project]/build.gradle
+### - [project]/build.gradle
 
 Add this into dependencies
 ```
@@ -164,6 +168,9 @@ https://console.firebase.google.com/
 
 https://firebase.google.com/docs/cloud-messaging/http-server-ref
 https://firebase.google.com/docs/cloud-messaging/send-message
+
+## Example code for Android (receiving message)
+https://github.com/riversun/android-firebase-fcm-client
 
 # Downloads
 ## maven
