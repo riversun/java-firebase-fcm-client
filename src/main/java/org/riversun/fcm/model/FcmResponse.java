@@ -22,6 +22,7 @@
 package org.riversun.fcm.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -29,7 +30,9 @@ import org.json.JSONObject;
 
 /**
  * 
- * Fcm downstream response
+ * Fcm downstream response <br>
+ * {@see https://firebase.google.com/docs/cloud-messaging/http-server-ref} <br>
+ * {@see https://firebase.google.com/docs/cloud-messaging/send-message}
  * 
  * @author Tom Misawa (riversun.org@gmail.com)
  *
@@ -38,23 +41,74 @@ public class FcmResponse {
 
 	private final JSONObject mJson;
 
-	public FcmResponse(int httpResponseCode, JSONObject json) {
-		mEnabled = true;
-		mJson = json;
-		mHttpResponseCode = httpResponseCode;
-		parse(json);
+	/**
+	 * Each result from FCM
+	 * 
+	 * @author Tom Misawa (riversun.org@gmail.com)
+	 *
+	 */
+	public static class FcmResult {
+
+		private String messageId;
+		private String error;
+		private String registrationId;
+
+		/**
+		 * Returns messageId
+		 * <p>
+		 * String specifying a unique ID for each successfully processed message
+		 * {@see 
+		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+		 * * }
+		 * 
+		 * @return
+		 */
+		public String getMessageId() {
+			return messageId;
+		}
+
+		/**
+		 * Returns Error <br>
+		 * String specifying the error that occurred when processing the message
+		 * for the recipient. The possible values can be found in table 9.<br>
+		 * {@link "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en#table9"}
+		 * 
+		 * 
+		 * @return
+		 */
+		public String getError() {
+			return error;
+		}
+
+		/**
+		 * Optional string specifying the canonical registration token for the
+		 * client app that the message was processed and sent to. Sender should
+		 * use this value as the registration token for future requests.
+		 * Otherwise, the messages might be rejected.<br>
+		 * 
+		 * {@see 
+		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+		 * * }
+		 * 
+		 * @return
+		 */
+		public String getRegistrationId() {
+			return registrationId;
+		}
+
+		@Override
+		public String toString() {
+			return "Result [messageId=" + messageId + ", error=" + error + ", registrationId=" + registrationId + "]";
+		}
 	}
 
-	public FcmResponse(int httpResponseCode, String errorMsg, Exception e) {
-		mEnabled = false;
-		mJson = null;
-		mHttpResponseCode = httpResponseCode;
-	}
+	/**
+	 * If HTTP Layer success
+	 */
+	private final boolean mHttpLayerSuccess;
 
-	// http layer messages
-	private final boolean mEnabled;
 	private final int mHttpResponseCode;
-	private String mErroMessage;
+	private String mHttpErrorMessage;
 
 	// service layer messages
 	private Long mMulticastId;
@@ -62,27 +116,20 @@ public class FcmResponse {
 	private int mFailure;
 	private int mCanonicalIds;
 
-	public static class FcmResult {
+	private List<FcmResult> mResultList;
 
-		private String messageId;
-		private String error;
-		private String registrationId;
-
-		public String getMessageId() {
-			return messageId;
-		}
-
-		public String getError() {
-			return error;
-		}
-
-		public String getRegistrationId() {
-			return registrationId;
-		}
-
+	public FcmResponse(int httpResponseCode, JSONObject json) {
+		mHttpLayerSuccess = true;
+		mJson = json;
+		mHttpResponseCode = httpResponseCode;
+		parse(json);
 	}
 
-	private List<FcmResult> mResultList;
+	public FcmResponse(int httpResponseCode, String errorMsg, Exception e) {
+		mHttpLayerSuccess = false;
+		mJson = null;
+		mHttpResponseCode = httpResponseCode;
+	}
 
 	private void parse(JSONObject json) {
 
@@ -137,28 +184,91 @@ public class FcmResponse {
 	}
 
 	// Getters[begin]
+	/**
+	 * 
+	 * @return Unique ID (number) identifying the multicast message.
+	 *         <p>
+	 *         <@link
+	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+	 *         >
+	 */
 	public Long getMulticastId() {
 		return mMulticastId;
 	}
 
+	/**
+	 * 
+	 * @return Number of messages that were processed without an error.
+	 *         <p>
+	 *         <@link
+	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+	 *         >
+	 */
 	public Integer getSuccess() {
 		return mSuccess;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return Number of messages that could not be processed.
+	 *         <p>
+	 *         <@link
+	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+	 *         >
+	 */
 	public int getFailure() {
 		return mFailure;
 	}
 
+	/**
+	 * 
+	 * @return Number of results that contain a canonical registration token. A
+	 *         canonical registration ID is the registration token of the last
+	 *         registration requested by the client app. This is the ID that the
+	 *         server should use when sending messages to the device.
+	 *         <p>
+	 *         <@link
+	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+	 *         >
+	 */
 	public int getCanonicalIds() {
 		return mCanonicalIds;
 	}
 
+	/**
+	 * 
+	 * @return Array of objects representing the status of the messages
+	 *         processed. The objects are listed in the same order as the
+	 *         request (i.e., for each registration ID in the request, its
+	 *         result is listed in the same index in the response).
+	 *         <p>
+	 *         message_id: String specifying a unique ID for each successfully
+	 *         processed message.
+	 *         <p>
+	 *         registration_id: Optional string specifying the canonical
+	 *         registration token for the client app that the message was
+	 *         processed and sent to. Sender should use this value as the
+	 *         registration token for future requests. Otherwise, the messages
+	 *         might be rejected.
+	 *         <p>
+	 *         error: String specifying the error that occurred when processing
+	 *         the message for the recipient. The possible values can be found
+	 *         in {@see 
+	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en#table9"
+	 *         * }
+	 * 
+	 *         <p>
+	 *         <@link
+	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+	 *         >
+	 */
 	public List<FcmResult> getResult() {
 		return mResultList;
 	}
 
 	public boolean isEnabled() {
-		return mEnabled;
+		return mHttpLayerSuccess;
 	}
 
 	public int getHttpResponseCode() {
@@ -166,19 +276,17 @@ public class FcmResponse {
 	}
 
 	public String getErroMessage() {
-		return mErroMessage;
+		return mHttpErrorMessage;
 	}
 
 	@Override
 	public String toString() {
-		return "FcmResponse [mEnabled=" + mEnabled + ", mHttpResponseCode=" + mHttpResponseCode + ", mErroMessage=" + mErroMessage + ", mMulticastId=" + mMulticastId + ", mSuccess=" + mSuccess
-				+ ", mFailure=" + mFailure + ", mCanonicalIds=" + mCanonicalIds + ", resultList=" + mResultList + "]";
+		String resultText = "[]";
+		if (mResultList != null) {
+			resultText = Arrays.toString(mResultList.toArray());
+		}
+		return "FcmResponse [HttpLayerSuccess=" + mHttpLayerSuccess + ", HttpResponseCode=" + mHttpResponseCode + ", HttpErrorMessage=" + mHttpErrorMessage + ", MulticastId="
+		+ mMulticastId + ", Success=" + mSuccess + ", Failure=" + mFailure + ", CanonicalIds=" + mCanonicalIds + ", ResultList=" + resultText + "]";
 	}
 
-	// Getters[end]
-//	@Override
-//	public String toString() {
-//		return "FcmResponse [multicastId=" + mMulticastId + ", success=" + mSuccess + ", failure=" + mFailure + ", canonicalIds=" + mCanonicalIds + ",result=" + resultList + "]";
-//	}
-	
 }

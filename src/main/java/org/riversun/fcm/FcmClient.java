@@ -42,8 +42,12 @@ import org.riversun.fcm.model.FcmResponse;
 
 /**
  * A Simple Firebase Cloud Messaging client<br>
- * Easy to send notification to devices
- *
+ * Easy to send notification to devices<br>
+ * 
+ * {see https://console.firebase.google.com} * {@see
+ * https://firebase.google.com/docs/cloud-messaging/http-server-ref} {@see
+ * https://firebase.google.com/docs/cloud-messaging/send-message}
+ * 
  * @author Tom Misawa (riversun.org@gmail.com)
  */
 public class FcmClient {
@@ -95,9 +99,9 @@ public class FcmClient {
 
 	/**
 	 * Set the server API key <br>
-	 * Where is server API key. Open https://console.firebase.google.com and
-	 * select your project.Click project settings and you can find the Server
-	 * Key on the "CloudMessaging Tab"
+	 * Where is server API key. Open {@link https://console.firebase.google.com}
+	 * and select your project.Click project settings and you can find the
+	 * Server Key on the "CloudMessaging Tab"
 	 * 
 	 */
 
