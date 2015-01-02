@@ -49,7 +49,7 @@ import org.json.JSONObject;
  * @author Tom Misawa (riversun.org@gmail.com)
  *
  */
-public class DeviceMessage {
+public class EntityMessage {
 
 	private final Map<String, Object> mDataMap = new LinkedHashMap<String, Object>();
 	private final List<String> mRegistrationTokenList = new ArrayList<String>();
@@ -90,9 +90,9 @@ public class DeviceMessage {
 	 * <@see
 	 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en">
 	 * <p>
-	 * "RegistrationToken" specifies a list of devices (registration tokens, or
-	 * IDs) receiving a multicast message. It must contain at least 1 and at
-	 * most 1000 registration tokens.
+	 * "RegistrationToken" specifies a list of entity(mobile devices,browser
+	 * front-end apps)s (registration tokens, or IDs) receiving a multicast
+	 * message. It must contain at least 1 and at most 1000 registration tokens.
 	 * <p>
 	 * Use this parameter only for multicast messaging, not for single
 	 * recipients. Multicast messages (sending to more than 1 registration
@@ -147,9 +147,10 @@ public class DeviceMessage {
 		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
 		 * >
 		 * <p>
-		 * This parameter specifies a list of devices (registration tokens, or
-		 * IDs) receiving a multicast message. It must contain at least 1 and at
-		 * most 1000 registration tokens.
+		 * This parameter specifies a list of entity(mobile devices,browser
+		 * front-end apps)s (registration tokens, or IDs) receiving a multicast
+		 * message. It must contain at least 1 and at most 1000 registration
+		 * tokens.
 		 * 
 		 * <p>
 		 * Use this parameter only for multicast messaging, not for single

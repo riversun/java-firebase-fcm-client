@@ -37,12 +37,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
-import org.riversun.fcm.model.DeviceMessage;
+import org.riversun.fcm.model.EntityMessage;
 import org.riversun.fcm.model.FcmResponse;
 
 /**
  * A Simple Firebase Cloud Messaging client<br>
- * Easy to send notification to devices<br>
+ * Easy to send notification to entity(mobile devices,browser front-end apps)s<br>
  * 
  * {see https://console.firebase.google.com} * {@see
  * https://firebase.google.com/docs/cloud-messaging/http-server-ref} {@see
@@ -73,9 +73,9 @@ public class FcmClient {
 
 	/**
 	 * 
-	 * To send messages to specific device(s) specified by registration token(s)
+	 * To send messages to specific entity(mobile devices,browser front-end apps)(s) specified by registration token(s)
 	 * that can be retrieved by FirebaseInstanceId.getInstance().getToken() on
-	 * the mobile device(s). <br>
+	 * the mobile entity(mobile devices,browser front-end apps)(s). <br>
 	 * To generate JSON message and to make a HTTP POST request like followings<br>
 	 * <code>
 	 * https://fcm.googleapis.com/fcm/send<br>
@@ -93,7 +93,7 @@ public class FcmClient {
 	 * @param msg
 	 * @return
 	 */
-	public FcmResponse pushToDevices(DeviceMessage msg) {
+	public FcmResponse pushToEntities(EntityMessage msg) {
 		return pushNotify(msg.toJsonObject());
 	}
 

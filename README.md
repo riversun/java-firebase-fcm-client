@@ -6,7 +6,7 @@ java-firebase-fcm-client is push notification client for firebase cloud messagin
 It is licensed under [MIT license](https://opensource.org/licenses/MIT).
 
 # Quick start
-## Example Server->Mobile device (like Android)
+## Example Server->Mobile entity(mobile devices,browser front-end apps) (like Android)
 - Push notification to Android Device from your server
 - You can write like this code on your server.
 
@@ -14,7 +14,7 @@ It is licensed under [MIT license](https://opensource.org/licenses/MIT).
 package com.example;
 
 import org.riversun.fcm.FcmClient;
-import org.riversun.fcm.model.DeviceMessage;
+import org.riversun.fcm.model.EntityMessage;
 import org.riversun.fcm.model.FcmResponse;
 
 public class SendMessageExample1 {
@@ -25,11 +25,11 @@ public class SendMessageExample1 {
 		// "select your project>project settings>cloud messaging"
 		client.setAPIKey("[YOUR_SERVER_API_KEY_HERE]");
 
-		// Data model for sending messages to specific devices
-		DeviceMessage msg = new DeviceMessage();
+		// Data model for sending messages to specific entity(mobile devices,browser front-end apps)s
+		EntityMessage msg = new EntityMessage();
 
 		// Set registration token that can be retrieved
-		// from Android device when calling
+		// from Android entity(mobile devices,browser front-end apps) when calling
 		// FirebaseInstanceId.getInstance().getToken();
 		msg.addRegistrationToken("REGISTRATION_TOKEN_FOR_AN_ANDROID_DEVICE_HERE");
 
@@ -38,14 +38,14 @@ public class SendMessageExample1 {
 		msg.putStringData("myKey2", "myValue2");
 
 		// push
-		FcmResponse res = client.pushToDevices(msg);
+		FcmResponse res = client.pushToEntities(msg);
 
 		System.out.println(res);
 
 	}
 }
 ```
-### DeviceMessage.java simply wraps following JSON.
+### EntityMessage.java simply wraps following JSON.
 
 ```json
 { "data":{
@@ -96,7 +96,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         final String registrationToken = FirebaseInstanceId.getInstance().getToken();
 
         //TODO
-        //Send to the server to register and identify the device in order to send a push notification to this device.
+        //Send to the server to register and identify the entity(mobile devices,browser front-end apps) in order to send a push notification to this entity(mobile devices,browser front-end apps).
 
     }
 }
@@ -144,7 +144,7 @@ Add this into dependencies
  classpath 'com.google.gms:google-services:3.0.0'
 ```
 
-### if you want to check if google play service is available on the device.Write like this.
+### if you want to check if google play service is available on the entity(mobile devices,browser front-end apps).Write like this.
 
 ```java
 

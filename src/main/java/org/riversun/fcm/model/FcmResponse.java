@@ -229,7 +229,8 @@ public class FcmResponse {
 	 * @return Number of results that contain a canonical registration token. A
 	 *         canonical registration ID is the registration token of the last
 	 *         registration requested by the client app. This is the ID that the
-	 *         server should use when sending messages to the device.
+	 *         server should use when sending messages to the entity(mobile
+	 *         devices,browser front-end apps).
 	 *         <p>
 	 *         <@link
 	 *         "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
