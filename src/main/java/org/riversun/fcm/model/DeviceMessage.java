@@ -29,7 +29,7 @@ import java.util.Map;
 import org.json.JSONObject;
 
 /**
- * Data model for sending messages to specific devices<br>
+ * Data model for sending messages to specific objects<br>
  * 
  * <p>
  * Wrapped JSON message like, <br>
@@ -144,7 +144,8 @@ public class DeviceMessage {
 
 		/**
 		 * Reference from firebase * <@see
-		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en">
+		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+		 * >
 		 * <p>
 		 * This parameter specifies a list of devices (registration tokens, or
 		 * IDs) receiving a multicast message. It must contain at least 1 and at
@@ -156,7 +157,8 @@ public class DeviceMessage {
 		 * tokens) are allowed using HTTP JSON format only.
 		 * 
 		 * <@see
-		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en">
+		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+		 * >
 		 */
 		final String[] registrationIds = mRegistrationTokenList.toArray(new String[] {});
 
@@ -166,7 +168,8 @@ public class DeviceMessage {
 		// payload
 		/**
 		 * Reference from firebase * <@see
-		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en">
+		 * "https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=en"
+		 * >
 		 * <p>
 		 * his parameter specifies the custom key-value pairs of the message's
 		 * payload.

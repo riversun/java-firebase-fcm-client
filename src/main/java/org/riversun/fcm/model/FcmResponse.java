@@ -109,6 +109,7 @@ public class FcmResponse {
 
 	private final int mHttpResponseCode;
 	private String mHttpErrorMessage;
+	private Exception mHttpLevelException;
 
 	// service layer messages
 	private Long mMulticastId;
@@ -125,10 +126,12 @@ public class FcmResponse {
 		parse(json);
 	}
 
-	public FcmResponse(int httpResponseCode, String errorMsg, Exception e) {
+	public FcmResponse(int httpResponseCode, String httpErrorMsg, Exception e) {
 		mHttpLayerSuccess = false;
 		mJson = null;
 		mHttpResponseCode = httpResponseCode;
+		mHttpErrorMessage = httpErrorMsg;
+		mHttpLevelException = e;
 	}
 
 	private void parse(JSONObject json) {
@@ -275,8 +278,12 @@ public class FcmResponse {
 		return mHttpResponseCode;
 	}
 
-	public String getErroMessage() {
+	public String getHttpErroMessage() {
 		return mHttpErrorMessage;
+	}
+
+	public Exception getHttpException() {
+		return mHttpLevelException;
 	}
 
 	@Override
@@ -286,7 +293,7 @@ public class FcmResponse {
 			resultText = Arrays.toString(mResultList.toArray());
 		}
 		return "FcmResponse [HttpLayerSuccess=" + mHttpLayerSuccess + ", HttpResponseCode=" + mHttpResponseCode + ", HttpErrorMessage=" + mHttpErrorMessage + ", MulticastId="
-		+ mMulticastId + ", Success=" + mSuccess + ", Failure=" + mFailure + ", CanonicalIds=" + mCanonicalIds + ", ResultList=" + resultText + "]";
+				+ mMulticastId + ", Success=" + mSuccess + ", Failure=" + mFailure + ", CanonicalIds=" + mCanonicalIds + ", ResultList=" + resultText + "]";
 	}
 
 }

@@ -184,11 +184,11 @@ public class FcmClient {
 					final int responseCode = con.getResponseCode();
 
 					if (responseCode >= 400) {
-						String msg = getFromStream(con.getErrorStream());
-						ret = new FcmResponse(responseCode, msg, e);
+						final String errorMsg = getFromStream(con.getErrorStream());
+						ret = new FcmResponse(responseCode, errorMsg, e);
 					} else {
-						String msg = getFromStream(con.getInputStream());
-						ret = new FcmResponse(responseCode, msg, e);
+						final String errorMsg = getFromStream(con.getInputStream());
+						ret = new FcmResponse(responseCode, errorMsg, e);
 					}
 				} catch (IOException e1) {
 				}
